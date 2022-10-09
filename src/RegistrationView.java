@@ -1,7 +1,10 @@
+import javax.security.auth.login.LoginException;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 
 
 public class RegistrationView extends JFrame {
@@ -93,9 +96,22 @@ public class RegistrationView extends JFrame {
         registration.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-
-
+                String regLogin = loginField.getText().trim();
+                String regPassword = String.valueOf(passwordField.getPassword()).trim();
+                try {
+                    Boolean bool = registrationController.registration(regLogin,regPassword,info);
+                    if (bool){
+                        setVisible(false);
+                    }
+                } catch (LoginException ex) {
+                    ex.printStackTrace();
+                } catch (NoSuchAlgorithmException ex) {
+                    ex.printStackTrace();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                } catch (ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                }
 
 
             }

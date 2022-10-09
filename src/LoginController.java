@@ -4,17 +4,41 @@ import java.security.NoSuchAlgorithmException;
 
 public class LoginController {
 
-    private LoginModel loginModel;
+    private DataBase dataBase;
+//    private LoginModel loginModel;
 
-    public LoginController(LoginModel loginModel) {
-        this.loginModel = loginModel;
+    public LoginController(/*LoginModel loginModel*/DataBase dataBase) {
+        this.dataBase = dataBase;
+//        this.loginModel = loginModel;
     }
 
-    public void methot(){
-        System.out.println("\n"+"Controller");
-        loginModel.modelMethod();
+//    public String toHash (String str) throws LoginException, NoSuchAlgorithmException {
+//        MessageDigest shall = MessageDigest.getInstance("SHA-1");
+//        MessageDigest md5 = MessageDigest.getInstance("MD5");
+//        byte[] bytes = md5.digest(str.getBytes());
+//        StringBuilder builder = new StringBuilder();
+//        for (byte b : bytes)
+//            builder.append(String.format("%02X ", b));
+//        String hash = builder.toString().replaceAll(" ","").toLowerCase();
+//        return hash;
+//    }
+    public void registration(){
+        RegistrationController  registrationController = new RegistrationController(/*loginModel*/dataBase);
+        RegistrationView registrationView = new RegistrationView(registrationController);
+
+
     }
-    public String toHash (String str) throws LoginException, NoSuchAlgorithmException {
+
+    public Boolean is_Empty(String loginText, String passwordText) {
+        Boolean result = false;
+        if (!loginText.trim().equals("") && !passwordText.trim().equals("")){
+            result = true;
+        }
+            return result;
+
+    }
+
+        public String toHash (String str) throws LoginException, NoSuchAlgorithmException {
         MessageDigest shall = MessageDigest.getInstance("SHA-1");
         MessageDigest md5 = MessageDigest.getInstance("MD5");
         byte[] bytes = md5.digest(str.getBytes());
@@ -24,28 +48,30 @@ public class LoginController {
         String hash = builder.toString().replaceAll(" ","").toLowerCase();
         return hash;
     }
-    public void registration(){
-        RegistrationController  registrationController = new RegistrationController(loginModel);
-        RegistrationView registrationView = new RegistrationView(registrationController);
 
-
+    public String checkLoginAndPassword(String loginText, String passwordText) throws LoginException, NoSuchAlgorithmException {
+       String str = dataBase.checkLoginAndPassword(loginText,toHash(passwordText));
+        System.out.println(str + "logController");
+        return str;
+       // return dataBase.checkLoginAndPassword(loginText,toHash(passwordText));//сделать чтоб возвращал роль
     }
 
-    public Boolean isEmpty(String loginText, String passwordText) {
-        Boolean result = false;
-        if (!loginText.trim().equals("") && !passwordText.trim().equals("")){
-            result = true;
+    public void goToView(String role) {
+        //направляет в соответсвии с ролью
+        if (role.equals("1")){
+            //admin
+        } else if(role.equals("2")){
+            //user
+        } else if(role.equals("3")) {
+            //verificator
+        } else{
+            //guest
         }
-            return result;
+
+
+        //открывает окно с учетом роли
 
     }
 
-    public Boolean checkLoginAndPassword(String loginText, String passwordText) throws LoginException, NoSuchAlgorithmException {
-        return loginModel.checkLoginAndPassword(loginText,toHash(passwordText));
-    }
 
-    public void goToView() {
-
-
-    }
 }

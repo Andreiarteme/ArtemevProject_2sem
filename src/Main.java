@@ -32,8 +32,9 @@ public class Main {
 
 
       //  toHash("hello world");
-        LoginModel loginModel = new LoginModel();
-        LoginController  loginController = new LoginController(loginModel);
+        DataBase dataBase = new DataBase();
+        //LoginModel loginModel = new LoginModel();
+        LoginController  loginController = new LoginController(dataBase);
         LoginView loginView = new LoginView(loginController);
     }
 

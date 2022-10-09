@@ -118,14 +118,17 @@ public class LoginView extends JFrame {
             public void actionPerformed(ActionEvent e) {
             String loginText = loginField.getText();
             String passwordText = String.valueOf(passwordField.getPassword());
-            Boolean fields = loginController.isEmpty(loginText,passwordText);
+            Boolean fields = loginController.is_Empty(loginText,passwordText);
             if (!fields){
                 info.setText("Введите логин и/или пароль");
             }else{
                 try {
-                    if (loginController.checkLoginAndPassword(loginText,passwordText)){
-                        info.setText("Добро пожаловать admin!");
-                        loginController.goToView();
+                    String role = loginController.checkLoginAndPassword(loginText,passwordText);
+                    System.out.println(role);
+                    if (!role.equals("bad")){//сделать чтоб возвращал роль
+                        info.setText("Добро пожаловать!");
+                        setVisible(false);
+                        loginController.goToView(role);
                     }else{
                         info.setText("Неверный логин или пароль");
                     }
@@ -143,10 +146,7 @@ public class LoginView extends JFrame {
         guest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-
-
-
+                loginController.goToView("0");
             }
         });
 
@@ -155,10 +155,6 @@ public class LoginView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
                 loginController.registration();
-
-
-
-
             }
         });
 
@@ -167,8 +163,9 @@ public class LoginView extends JFrame {
             public void actionPerformed(ActionEvent e) {
 
 
+                //здесь еще надо сделать штуку для изменения пароля
 
-                
+
             }
         });
 
