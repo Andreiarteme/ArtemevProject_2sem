@@ -1,5 +1,5 @@
 public class Quote {
-    private String id;
+//    private String id;
     private String quote;
     private String teacher;
     private String subject;
@@ -15,12 +15,12 @@ public class Quote {
         this.userId = userId;
     }
 
-    public String getId() {
-        return id;
-    }
-    public void setId(String id) {
-        this.id = id;
-    }
+//    public String getId() {
+//        return id;
+//    }
+//    public void setId(String id) {
+//        this.id = id;
+//    }
 
     public String getQuote() {
         return quote;
@@ -48,5 +48,12 @@ public class Quote {
     }
     public void setData(String data) {
         this.data = data;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

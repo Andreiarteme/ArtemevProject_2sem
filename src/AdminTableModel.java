@@ -1,12 +1,12 @@
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 
-public class GuestTableModel extends AbstractTableModel {
-    private int columnCount = 4;
+public class AdminTableModel extends AbstractTableModel {
+    private int columnCount = 5;
     private ArrayList<Quote> quotes;
     private ArrayList<String []> arrayList;
 
-    public GuestTableModel(ArrayList<Quote> quotes) {
+    public AdminTableModel(ArrayList<Quote> quotes) {
         this.quotes = quotes;
         arrayList = new ArrayList<String[]>();
         for (int i = 0;i < quotes.size();i++){
@@ -15,6 +15,7 @@ public class GuestTableModel extends AbstractTableModel {
             str[1] = quotes.get(i).getTeacher();
             str[2] = quotes.get(i).getSubject();
             str[3] = quotes.get(i).getData();
+            str[4] = quotes.get(i).getUserId();
             arrayList.add(str);
         }
 
@@ -47,22 +48,26 @@ public class GuestTableModel extends AbstractTableModel {
             case 1: return "Преподаватель";
             case 2: return "Предмет";
             case 3: return "Дата";
+            case 4: return "ID автора";
         }
         return "";
     }
 
     public String getValueAt(int rowIndex, String nameColumn){
         Quote q = quotes.get(rowIndex);
-        if (nameColumn.equals("quote")){
+        if (nameColumn.equals("Цитата")){
             return q.getQuote();
         }
-        if (nameColumn.equals("teacher")){
+        if (nameColumn.equals("Преподаватель")){
             return q.getTeacher();
         }
-        if (nameColumn.equals("subject")){
+        if (nameColumn.equals("Предмет")){
             return q.getSubject();
         }
-        if (nameColumn.equals("data")){
+        if (nameColumn.equals("Дата")){
+            return q.getData();
+        }
+        if (nameColumn.equals("ID автора")){
             return q.getData();
         }
         return null ;

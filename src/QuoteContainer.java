@@ -23,4 +23,5 @@ public class QuoteContainer {
     public ArrayList<Quote> getArQuotes() {
         return quotes;
     }
+
 }

@@ -60,6 +60,8 @@ public class LoginController {
         //направляет в соответсвии с ролью
         if (role.equals("1")){
             //admin
+            AdminController adminController = new AdminController(dataBase);
+            AdminView adminView = new AdminView(adminController);
         } else if(role.equals("2")){
             //user
         } else if(role.equals("3")) {

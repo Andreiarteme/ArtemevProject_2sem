@@ -148,4 +148,68 @@ public class DataBase {
 
 
     }
+
+    public void registrQuote(Quote quote) {
+        String insert = "INSERT INTO quotes (quote, teacher, subject, data) VALUES ( ?, ?, ?, ?);";
+        try {
+            PreparedStatement prStatement = getConnection().prepareStatement(insert);
+            prStatement.setString(1, quote.getQuote());
+            prStatement.setString(2, quote.getTeacher());
+            prStatement.setString(3, quote.getSubject());
+            prStatement.setString(4, quote.getData());
+//            prStatement.setString(5, quote.getUserId());
+            prStatement.executeUpdate();
+            System.out.println("Мы здесь");
+            String rr = getNewQuoteId(quote.getQuote());
+            insToQuote_role(rr);
+
+
+        }catch (Exception e){
+
+        }
+    }
+    public String getNewQuoteId(String quote) throws SQLException, ClassNotFoundException {
+        String sel = "SELECT id FROM quotes WHERE quotes.quote = '" + quote + "'";
+        String qid = "1";
+        try {
+            PreparedStatement prStat = getConnection().prepareStatement(sel);
+            ResultSet res = prStat.executeQuery();
+            while(res.next()){
+                qid = res.getString("id");
+                 System.out.println("!!!!ID!!!!!" + qid);
+            }
+        }catch (Exception e){
+
+        }
+        return qid;
+    }
+    public void insToQuote_role(String qid) throws SQLException, ClassNotFoundException {
+        String ins = "INSERT INTO user_quote (user_id, quote_id)" +
+                "VALUES (?,?)";
+        try {
+            PreparedStatement prSt = getConnection().prepareStatement(ins);
+            prSt.setString(1, "5");
+            prSt.setString(2, qid);
+            prSt.executeUpdate();
+            System.out.println("YYYYEEESSS");
+        }catch (Exception e){
+
+        }
+
+    }
+
+    public void delete(int ind) throws SQLException, ClassNotFoundException {
+        String quot = quotes.getArQuotes().get(ind).getQuote();
+        String ins =  "DELETE FROM quotes WHERE quotes.quote = ?";
+        try {
+            PreparedStatement prSt = getConnection().prepareStatement(ins);
+            prSt.setString(1, quot);
+            prSt.executeUpdate();
+            System.out.println("YYYYEEESSS");
+        }catch (Exception e){
+
+        }
+
+
+    }
 }
