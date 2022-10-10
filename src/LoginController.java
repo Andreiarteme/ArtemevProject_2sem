@@ -66,10 +66,12 @@ public class LoginController {
             //verificator
         } else{
             //guest
+            GuestController guestController = new GuestController(dataBase);
+            GuestView guestView = new GuestView(guestController);
+
         }
 
 
-        //открывает окно с учетом роли
 
     }
 

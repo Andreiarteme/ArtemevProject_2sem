@@ -40,7 +40,7 @@ public class RegistrationView extends JFrame {
         passwordField = new JPasswordField(20);
         registration = new JButton("Зарегестрироваться");
         authorization = new JButton("Авторизироваться");
-        info = new JLabel("Данный логин уже зарегестрирован");
+        info = new JLabel("Введите логин и пароль");
 
         //добавление на панель
         add(registrationPanel);

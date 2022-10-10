@@ -146,6 +146,7 @@ public class LoginView extends JFrame {
         guest.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                setVisible(false);
                 loginController.goToView("0");
             }
         });

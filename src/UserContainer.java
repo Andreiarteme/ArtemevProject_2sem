@@ -20,12 +20,12 @@ public class UserContainer {
         }
         return true;
     }
-    public boolean check(){
-
-
-
-        return true;
-    }
+//    public boolean check(){
+//
+//
+//
+//        return true;
+//    }
 
     public String check(String loginText, String toHash) {
         for (User user : users) {
