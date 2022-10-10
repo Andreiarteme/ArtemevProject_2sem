@@ -5,9 +5,11 @@ public class Quote {
     private String subject;
     private String data;
     private String userId;
+    private String id;
 
 
-    public Quote(String quote, String teacher, String subject, String data, String userId) {
+    public Quote(String id, String quote, String teacher, String subject, String data, String userId) {
+        this.id = id;
         this.quote = quote;
         this.teacher = teacher;
         this.subject = subject;
@@ -21,6 +23,10 @@ public class Quote {
 //    public void setId(String id) {
 //        this.id = id;
 //    }
+
+    public String getId(){
+        return id;
+    }
 
     public String getQuote() {
         return quote;

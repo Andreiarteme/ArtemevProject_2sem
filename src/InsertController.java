@@ -31,7 +31,7 @@ public class InsertController {
         DataBase dataBase = new DataBase();
         System.out.println("regQuote from InsertController");
         if (dataBase.getQuotes().quoteExists(quore)){
-            Quote quote = new Quote(quore,  teacher,  subject,  data,  userId);//по умолчанию роль user
+            Quote quote = new Quote("",quore,  teacher,  subject,  data,  userId);//по умолчанию роль user
             dataBase.registrQuote(quote);
             info.setText("Запись успешно добавленна!");
             goBack();

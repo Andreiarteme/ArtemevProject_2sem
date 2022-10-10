@@ -12,7 +12,7 @@ public class DataBase {
     }
 
     private QuoteContainer makeQuote() {
-        String select1 ="SELECT quotes.quote, quotes.teacher, quotes.subject, quotes.data, user_quote.user_id FROM quotes,user_quote WHERE quotes.id = user_quote.quote_id";
+        String select1 ="SELECT quotes.id, quotes.quote, quotes.teacher, quotes.subject, quotes.data, user_quote.user_id FROM quotes,user_quote WHERE quotes.id = user_quote.quote_id";
         try {
             PreparedStatement prStatement = getConnection().prepareStatement(select1);
 //            prStatement.setString(1, user.getLogin());
@@ -24,7 +24,7 @@ public class DataBase {
 //                String ur = result.getString("subject");
 //                String un1 = result.getString("data");
 //                String up1 = result.getString("user_id");
-                quotes.add(new Quote(result.getString("quote"), result.getString("teacher"), result.getString("subject"), result.getString("data"), result.getString("user_id")));
+                quotes.add(new Quote(result.getString("id"),result.getString("quote"), result.getString("teacher"), result.getString("subject"), result.getString("data"), result.getString("user_id")));
 //                System.out.println(un+up+ur+un1+up1);
             }
             connection.close();
@@ -210,6 +210,37 @@ public class DataBase {
 
         }
 
+
+    }
+
+    public Quote edit1(int ind) {
+        Quote quot = quotes.getArQuotes().get(ind);
+        return quot;
+    }
+
+    public void edit2Quote(Quote quote) {
+        //String id = quote.getId();
+        String q = quote.getQuote();
+        String t = quote.getTeacher();
+        String s = quote.getSubject();
+        String d = quote.getData();
+        String i = quote.getId();
+
+//        String ins =  "UPDATE quotes SET quote = '?', teacher = '?', subject = '?', data = '?' WHERE quotes.id = '?'";
+        System.out.println("БД вот edit2Qotes");
+        try {
+            String ins =  "UPDATE quotes SET quote = '"+ q +"', teacher = '"+ t +"', subject = '"+ s +"', data = '"+ d +"' WHERE quotes.id = '"+ i +"'";
+            PreparedStatement prSt = getConnection().prepareStatement(ins);
+//            prSt.setString(1, quote.getQuote());
+//            prSt.setString(2, quote.getTeacher());
+//            prSt.setString(3, quote.getSubject());
+//            prSt.setString(4, quote.getData());
+//            prSt.setString(5, quote.getId());
+            prSt.executeUpdate();
+            System.out.println("YYYYEEESSS");
+        }catch (Exception e){
+
+        }
 
     }
 }

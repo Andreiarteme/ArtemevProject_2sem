@@ -31,4 +31,10 @@ public class AdminController {
 
 
     }
+
+    public void edit(int ind) {
+        Quote quote = dataBase.edit1(ind);
+        EditController editController = new EditController(dataBase);
+        EditView editView = new EditView(editController,quote);
+    }
 }

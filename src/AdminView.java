@@ -165,8 +165,9 @@ public class AdminView extends JFrame {
         edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-
-
+                setVisible(false);
+                int ind = table.getSelectedRow();
+                adminController.edit(ind);
 
 
             }
