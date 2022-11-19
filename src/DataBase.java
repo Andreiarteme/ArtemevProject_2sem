@@ -54,13 +54,15 @@ public class DataBase {
         return connection;
     }
 
+    //надо изменить, добавить группу юзера
     public void registrUser(User user) throws SQLException, ClassNotFoundException {
-        String insert = "INSERT INTO users (username, password)" +
-                "VALUES (?,?)";
+        String insert = "INSERT INTO users (username, password, group)" +
+                "VALUES (?,?,?)";
         try {
             PreparedStatement prStatement = getConnection().prepareStatement(insert);
             prStatement.setString(1, user.getLogin());
             prStatement.setString(2, user.getHashPassword());
+            prStatement.setString(3, user.getGroup());
             prStatement.executeUpdate();
         }catch (Exception e){
 
@@ -72,9 +74,11 @@ public class DataBase {
 //        PreparedStatement prStatement = getConnection().prepareStatement(sel);
 //        ResultSet res = prStatement.executeQuery();
 //        String uid = res.getString("id");
-
-        insToUser_role(uid);
-
+        if (!uid.equals("bad")) {
+            insToUser_role(uid);
+        }else{
+            System.out.println("Ошибка DataBase_80, userId not found");
+        }
 //        String ins = "INSERT INTO user_role (user_id, role_id)" +
 //                "VALUES (?,?)";
 //        PreparedStatement prSt = getConnection().prepareStatement(ins);
@@ -84,9 +88,11 @@ public class DataBase {
         //connection.close();
 
     }
+
+   //надо сделать чтлобы возвращал не 7 а то что надо
     public String getNewUserId(String usLog) throws SQLException, ClassNotFoundException {
         String sel = "SELECT id FROM users WHERE users.username = '" + usLog + "'";
-        String uid = "7";
+        String uid = "bad";
         try {
             PreparedStatement prStat = getConnection().prepareStatement(sel);
             ResultSet res = prStat.executeQuery();
@@ -117,7 +123,7 @@ public class DataBase {
     public UserContainer makeUsers(){
         //ResultSet result;
         //String select = "SELECT * FROM users" ;
-        String select1 = "SELECT users.username,users.password,user_role.role_id FROM users,user_role WHERE users.id = user_role.user_id";
+        String select1 = "SELECT users.username,users.password,user_role.role_id, users.group FROM users,user_role WHERE users.id = user_role.user_id";
         try {
             PreparedStatement prStatement = getConnection().prepareStatement(select1);
 //            prStatement.setString(1, user.getLogin());
@@ -127,7 +133,7 @@ public class DataBase {
 //                String un = result.getString("username");
 //                String up = result.getString("password");
 //                String ur = result.getString("role_id");
-                users.add(new User(result.getString("username"),result.getString("password"),result.getString("role_id")));
+                users.add(new User(result.getString("username"),result.getString("password"),result.getString("role_id"), result.getString("group")));
 //                System.out.println(un + " === " + up);
             }
             connection.close();
@@ -137,12 +143,28 @@ public class DataBase {
         return users;
     }
 
-        public String checkLoginAndPassword(String loginText, String toHash) {
-        String str = users.check(loginText,toHash);
+        public boolean checkLoginAndPassword(String loginText, String toHash) {
+        boolean str = users.check(loginText,toHash);
             System.out.println(str + "database");
         return str;
        // return users.check(loginText,toHash);//сделать чтоб возвращал роль
     }
+
+//    public String getUserId(String loginText) {
+//        String sel = "SELECT id FROM user WHERE quotes.quote = '" + loginText + "'";
+//        String qid = "1";
+//        try {
+//            PreparedStatement prStat = getConnection().prepareStatement(sel);
+//            ResultSet res = prStat.executeQuery();
+//            while(res.next()){
+//                qid = res.getString("id");
+//                System.out.println("!!!!ID!!!!!" + qid);
+//            }
+//        }catch (Exception e){
+//
+//        }
+//        return qid;
+//    }
 
     public void checkRole(String log, String role) {
 
@@ -242,5 +264,11 @@ public class DataBase {
 
         }
 
+    }
+
+    public User getUser(String login) throws Exception {
+        User user;
+        user = users.getUser(login);
+        return user;
     }
 }

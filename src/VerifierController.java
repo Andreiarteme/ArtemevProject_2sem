@@ -1,10 +1,14 @@
 import java.sql.SQLException;
 
-public class AdminController {
+//public class VerifierController {
+//}
+//import java.sql.SQLException;
+
+public class VerifierController {
     private DataBase dataBase;
     private User user;
 
-    public AdminController(DataBase dataBase, User user) {
+    public VerifierController(DataBase dataBase, User user) {
         this.dataBase = dataBase;
         this.user = user;
     }
@@ -12,8 +16,6 @@ public class AdminController {
     public DataBase getDataBase() {
         return dataBase;
     }
-
-    //сделать добавление верификатора!!!!!!
 
     public void toLoginWindow() {
         LoginController loginController = new LoginController(dataBase);
@@ -40,5 +42,10 @@ public class AdminController {
         Quote quote = dataBase.edit1(ind);
         EditController editController = new EditController(dataBase, user);
         EditView editView = new EditView(editController,quote);
+    }
+
+    public boolean whatgroup() {
+//        String group = dataBase.
+        return false;
     }
 }

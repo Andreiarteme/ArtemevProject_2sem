@@ -21,9 +21,9 @@ public class RegistrationController {
         LoginView loginView = new LoginView(loginController);
     }
 
-    public boolean registration(String regLogin, String regPassword, JLabel info) throws LoginException, NoSuchAlgorithmException, SQLException, ClassNotFoundException {
+    public boolean registration(String regLogin, String regPassword, JLabel info, String regGroup) throws LoginException, NoSuchAlgorithmException, SQLException, ClassNotFoundException {
         if (!regLogin.equals("") && !regPassword.equals("")){
-            return regUser(regLogin,toHash(regPassword),info);
+            return regUser(regLogin,toHash(regPassword),info, regGroup);
 
         }else{
             info.setText("Заполните поля!");
@@ -33,15 +33,15 @@ public class RegistrationController {
 
     }
 
-    private boolean regUser(String regLogin, String regHashPassword,JLabel info) throws SQLException, ClassNotFoundException {
+    private boolean regUser(String regLogin, String regHashPassword,JLabel info, String regGroup) throws SQLException, ClassNotFoundException {
 
 
         DataBase dataBase = new DataBase();
         if (dataBase.getUsers().userExists(regLogin)){
-            User user = new User(regLogin,regHashPassword, "2");//по умолчанию роль user
+            User user = new User(regLogin,regHashPassword, "2", regGroup);//по умолчанию роль user
             dataBase.registrUser(user);
-            info.setText("Пользователь успешно зарегестрирован!");
-            goYoWiew();
+//            info.setText("Пользователь успешно зарегестрирован!");
+//            goYoWiew(user);
             return true;
         }else{
             info.setText("Данный логин уже существует!");
@@ -61,7 +61,8 @@ public class RegistrationController {
         return hash;
     }
 
-    private void goYoWiew() {
+    public void goYoWiew(String login) throws Exception {
+        dataBase.getUser(login);
 
         //user
 

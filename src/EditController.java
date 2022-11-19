@@ -7,11 +7,13 @@ import java.sql.SQLException;
 public class EditController {
 
     private DataBase dataBase;
+    private User user;
 //    private LoginModel loginModel;
 
-    public EditController(/*LoginModel loginModel*/ DataBase dataBase) {
+    public EditController(/*LoginModel loginModel*/ DataBase dataBase, User user) {
 //        this.loginModel = loginModel;
         this.dataBase = dataBase;
+        this.user = user;
     }
 
     public boolean edition(String id, String quore, String teacher, String subject, String data, String userId, JLabel info) throws LoginException, NoSuchAlgorithmException, SQLException, ClassNotFoundException {
@@ -45,7 +47,7 @@ public class EditController {
 
     public void goBack() {
         DataBase dataBase = new DataBase();
-        AdminController adminController = new AdminController(dataBase);
+        AdminController adminController = new AdminController(dataBase, user);
         AdminView adminView = new AdminView(adminController);
     }
 

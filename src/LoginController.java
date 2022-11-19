@@ -49,33 +49,50 @@ public class LoginController {
         return hash;
     }
 
-    public String checkLoginAndPassword(String loginText, String passwordText) throws LoginException, NoSuchAlgorithmException {
-       String str = dataBase.checkLoginAndPassword(loginText,toHash(passwordText));
+    public boolean checkLoginAndPassword(String loginText, String passwordText) throws LoginException, NoSuchAlgorithmException {
+       boolean str = dataBase.checkLoginAndPassword(loginText,toHash(passwordText));
         System.out.println(str + "logController");
         return str;
        // return dataBase.checkLoginAndPassword(loginText,toHash(passwordText));//сделать чтоб возвращал роль
     }
+//    public String getUserId(String loginText) throws LoginException, NoSuchAlgorithmException {
+//        String userId = dataBase.getUserId(loginText);
+//        System.out.println(userId + "logController");
+//        return userId;
+//        // return dataBase.checkLoginAndPassword(loginText,toHash(passwordText));//сделать чтоб возвращал роль
+//    }
 
-    public void goToView(String role) {
+
+    //вместо role добавить login
+    public void goToView(String login) throws Exception {
         //направляет в соответсвии с ролью
-        if (role.equals("1")){
+
+        //добавить метод, чтобы давал user черех логин
+        User user = dataBase.getUser(login);
+        //user.getRole();
+
+        if (user.getRole().equals("1")){
             //admin
-            AdminController adminController = new AdminController(dataBase);
+            AdminController adminController = new AdminController(dataBase, user);
             AdminView adminView = new AdminView(adminController);
-        } else if(role.equals("2")){
+        } else if(user.getRole().equals("2")){
             //user
-        } else if(role.equals("3")) {
+        } else if(user.getRole().equals("3")) {
             //verificator
+            VerifierController verifierController = new VerifierController(dataBase, user);
+            VerifierView verifierView = new VerifierView(verifierController);
         } else{
-            //guest
-            GuestController guestController = new GuestController(dataBase);
-            GuestView guestView = new GuestView(guestController);
-
+//            //guest
+//            GuestController guestController = new GuestController(dataBase);
+//            GuestView guestView = new GuestView(guestController);
+            System.out.println("Error такого юзера нет");
         }
-
-
-
     }
 
 
+    public void goToView() {
+        //guest
+            GuestController guestController = new GuestController(dataBase);
+            GuestView guestView = new GuestView(guestController);
+    }
 }

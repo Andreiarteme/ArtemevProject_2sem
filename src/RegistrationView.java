@@ -14,6 +14,7 @@ public class RegistrationView extends JFrame {
 
     private JPanel registrationPanel;
     private JTextField loginField;
+    private JTextField groupField;
     private JPasswordField passwordField;
     private JButton registration;
     private JButton authorization;
@@ -41,6 +42,7 @@ public class RegistrationView extends JFrame {
         registration = new JButton("Зарегестрироваться");
         authorization = new JButton("Авторизироваться");
         info = new JLabel("Введите логин и пароль");
+        groupField = new JTextField(5);
 
         //добавление на панель
         add(registrationPanel);
@@ -62,11 +64,22 @@ public class RegistrationView extends JFrame {
         a2.gridheight = 1;
         registrationPanel.add(passwordField, a2);
 
+        GridBagConstraints a6 = new GridBagConstraints();
+        a6.weightx = 0;
+        a6.weighty = 0;
+        a6.gridx = 2;
+        a6.gridy = 3;
+        a6.gridwidth = 4;
+        a6.gridheight = 1;
+        registrationPanel.add(groupField, a6);
+
+
+
         GridBagConstraints a3 = new GridBagConstraints();
         a3.weightx = 0;
         a3.weighty = 0;
         a3.gridx = 4;
-        a3.gridy = 4;
+        a3.gridy = 5;
         a3.gridwidth = 2;
         a3.gridheight = 1;
         registrationPanel.add(authorization, a3);
@@ -75,7 +88,7 @@ public class RegistrationView extends JFrame {
         a4.weightx = 0;
         a4.weighty = 0;
         a4.gridx = 4;
-        a4.gridy = 3;
+        a4.gridy = 4;
         a4.gridwidth = 2;
         a4.gridheight = 1;
         registrationPanel.add(registration, a4);
@@ -98,10 +111,16 @@ public class RegistrationView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String regLogin = loginField.getText().trim();
                 String regPassword = String.valueOf(passwordField.getPassword()).trim();
+                String regGroup = groupField.getText().trim();
+
                 try {
-                    Boolean bool = registrationController.registration(regLogin,regPassword,info);
+                    Boolean bool = registrationController.registration(regLogin,regPassword,info, regGroup);
                     if (bool){
+                        registrationController.goYoWiew(regLogin);
+                        System.out.println("Пользователь добавлен");
                         setVisible(false);
+                    }else{
+                        info.setText("Ошибка, пользователь не добавлен!");
                     }
                 } catch (LoginException ex) {
                     ex.printStackTrace();
@@ -110,6 +129,8 @@ public class RegistrationView extends JFrame {
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 } catch (ClassNotFoundException ex) {
+                    ex.printStackTrace();
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
 

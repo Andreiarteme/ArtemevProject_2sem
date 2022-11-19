@@ -123,18 +123,24 @@ public class LoginView extends JFrame {
                 info.setText("Введите логин и/или пароль");
             }else{
                 try {
-                    String role = loginController.checkLoginAndPassword(loginText,passwordText);
-                    System.out.println(role);
-                    if (!role.equals("bad")){//сделать чтоб возвращал роль
+                    //изменить на boolean
+                    boolean bool = loginController.checkLoginAndPassword(loginText,passwordText);
+                    System.out.println(bool);
+                    if (/*!role.equals("bad")*/bool){//сделать чтоб возвращал роль
                         info.setText("Добро пожаловать!");
                         setVisible(false);
-                        loginController.goToView(role);
+
+//                        int userId = loginController.getUserId(loginText);
+                        // здесь добавляется login а не role
+                        loginController.goToView(loginText);
                     }else{
                         info.setText("Неверный логин или пароль");
                     }
                 } catch (LoginException ex) {
                     ex.printStackTrace();
                 } catch (NoSuchAlgorithmException ex) {
+                    ex.printStackTrace();
+                } catch (Exception ex) {
                     ex.printStackTrace();
                 }
             }
@@ -147,7 +153,7 @@ public class LoginView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
-                loginController.goToView("0");
+                loginController.goToView();
             }
         });
 

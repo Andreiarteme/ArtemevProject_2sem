@@ -27,13 +27,24 @@ public class UserContainer {
 //        return true;
 //    }
 
-    public String check(String loginText, String toHash) {
+    public boolean check(String loginText, String toHash) {
         for (User user : users) {
             if (user.getLogin().equals(loginText) && user.getHashPassword().equals(toHash)) {
                 System.out.println(user.getRole()+"cont");
-                return user.getRole();
+                return true;
             }
         }
-        return "bad";
+        return false;
+    }
+
+    public User getUser(String login) throws Exception {
+        for (User user : users) {
+            if (user.getLogin().equals(login)) {
+                System.out.println(user.getRole()+"cont");
+                return user;
+            }
+        }
+        throw new Exception();
+
     }
 }

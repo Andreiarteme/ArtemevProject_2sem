@@ -8,11 +8,13 @@ import java.sql.SQLException;
 public class InsertController {
 
     private DataBase dataBase;
+    private User user;
 //    private LoginModel loginModel;
 
-    public InsertController(/*LoginModel loginModel*/ DataBase dataBase) {
+    public InsertController(/*LoginModel loginModel*/ DataBase dataBase, User user) {
 //        this.loginModel = loginModel;
         this.dataBase = dataBase;
+        this.user = user;
     }
 
     public boolean registration(String quore, String teacher, String subject,String data, String userId,JLabel info) throws LoginException, NoSuchAlgorithmException, SQLException, ClassNotFoundException {
@@ -46,7 +48,7 @@ public class InsertController {
 
     public void goBack() {
         DataBase dataBase = new DataBase();
-        AdminController adminController = new AdminController(dataBase);
+        AdminController adminController = new AdminController(dataBase, user);
         AdminView adminView = new AdminView(adminController);
     }
 }
