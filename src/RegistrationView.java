@@ -114,10 +114,9 @@ public class RegistrationView extends JFrame {
                 String regGroup = groupField.getText().trim();
 
                 try {
-                    Boolean bool = registrationController.registration(regLogin,regPassword,info, regGroup);
+                    Boolean bool = registrationController.registration(regLogin,regPassword,info);
                     if (bool){
-                        registrationController.goYoWiew(regLogin);
-                        System.out.println("Пользователь добавлен");
+                        registrationController.regUser(regLogin,regPassword,regGroup);
                         setVisible(false);
                     }else{
                         info.setText("Ошибка, пользователь не добавлен!");

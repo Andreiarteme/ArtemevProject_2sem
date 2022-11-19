@@ -21,10 +21,14 @@ public class RegistrationController {
         LoginView loginView = new LoginView(loginController);
     }
 
-    public boolean registration(String regLogin, String regPassword, JLabel info, String regGroup) throws LoginException, NoSuchAlgorithmException, SQLException, ClassNotFoundException {
+    public boolean registration(String regLogin, String regPassword, JLabel info) throws Exception {
         if (!regLogin.equals("") && !regPassword.equals("")){
-            return regUser(regLogin,toHash(regPassword),info, regGroup);
-
+            if (dataBase.getUsers().userExists(regLogin)){
+                return true;
+            }else{
+                info.setText("Данный логин уже существует!");
+                return false;
+            }
         }else{
             info.setText("Заполните поля!");
             return false;
@@ -33,25 +37,19 @@ public class RegistrationController {
 
     }
 
-    private boolean regUser(String regLogin, String regHashPassword,JLabel info, String regGroup) throws SQLException, ClassNotFoundException {
-
-
-        DataBase dataBase = new DataBase();
-        if (dataBase.getUsers().userExists(regLogin)){
-            User user = new User(regLogin,regHashPassword, "2", regGroup);//по умолчанию роль user
+    public boolean regUser(String regLogin, String regHashPassword, String regGroup) throws Exception {
+//        DataBase dataBase = new DataBase();
+            User user = new User(regLogin,toHash(regHashPassword), "2", regGroup);//по умолчанию роль user
             dataBase.registrUser(user);
-//            info.setText("Пользователь успешно зарегестрирован!");
-//            goYoWiew(user);
-            return true;
-        }else{
-            info.setText("Данный логин уже существует!");
-            return false;
-        }
+            System.out.println("Пользователь зарегистрораван!!!!!!");
+            //добавить метод добавления в таблицу юзео_роль
 
+            goToWiew(regLogin);
+            return true;
     }
 
         public String toHash (String str) throws LoginException, NoSuchAlgorithmException {
-        MessageDigest shall = MessageDigest.getInstance("SHA-1");
+//        MessageDigest shall = MessageDigest.getInstance("SHA-1");
         MessageDigest md5 = MessageDigest.getInstance("MD5");
         byte[] bytes = md5.digest(str.getBytes());
         StringBuilder builder = new StringBuilder();
@@ -61,11 +59,11 @@ public class RegistrationController {
         return hash;
     }
 
-    public void goYoWiew(String login) throws Exception {
-        dataBase.getUser(login);
-
+    public void goToWiew(String login) throws Exception {
         //user
-
+        User user = dataBase.getUser(login);
+        UserController userController = new UserController(dataBase, user);
+        UserView userView = new UserView(userController);
 
 
 

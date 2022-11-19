@@ -31,7 +31,7 @@ public class EditController {
     private boolean editQuote(String id, String quore, String teacher, String subject,String data,String userId, JLabel info) throws SQLException, ClassNotFoundException {
         DataBase dataBase = new DataBase();
         System.out.println("editQuote from EdittController");
-        if (dataBase.getQuotes().quoteExists(quore)){
+        if (!dataBase.getQuotes().quoteExists(quore)){
             Quote quote = new Quote(id,quore,  teacher,  subject,  data,  userId);//по умолчанию роль user
             dataBase.edit2Quote(quote);
             info.setText("Запись успешно изменена!");
@@ -46,6 +46,7 @@ public class EditController {
 
 
     public void goBack() {
+        System.out.println("EditController goBack");
         DataBase dataBase = new DataBase();
         AdminController adminController = new AdminController(dataBase, user);
         AdminView adminView = new AdminView(adminController);

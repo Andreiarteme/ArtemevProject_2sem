@@ -77,6 +77,8 @@ public class LoginController {
             AdminView adminView = new AdminView(adminController);
         } else if(user.getRole().equals("2")){
             //user
+            UserController userController = new UserController(dataBase, user);
+            UserView userView = new UserView(userController);
         } else if(user.getRole().equals("3")) {
             //verificator
             VerifierController verifierController = new VerifierController(dataBase, user);
