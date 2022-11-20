@@ -13,8 +13,6 @@ public class AdminController {
         return dataBase;
     }
 
-    //сделать добавление верификатора!!!!!!
-
     public User getUser() {
         return user;
     }
@@ -42,5 +40,10 @@ public class AdminController {
         Quote quote = dataBase.edit1(ind);
         EditController editController = new EditController(dataBase, user);
         EditView editView = new EditView(editController,quote);
+    }
+
+    public void rename() {
+        RenameController renameController = new RenameController(dataBase, user);
+        RenameView renameView = new RenameView(renameController);
     }
 }

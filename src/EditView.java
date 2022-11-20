@@ -24,6 +24,8 @@ public class EditView extends JFrame {
     private JLabel info;
     private Quote quo;
 
+
+
     public EditView(EditController editController, Quote quo) {
         this.editController = editController;
         this.quo = quo;
@@ -129,11 +131,6 @@ public class EditView extends JFrame {
         panel.revalidate();
 
         //Акшены
-//        quore = new JTextField(20);
-//        teacher = new JTextField(15);
-//        subject = new JTextField(10);
-//        data = new JTextField(10);
-//        userId = new JTextField(5);
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -175,11 +172,6 @@ public class EditView extends JFrame {
         });
 
 
-        this.setVisible(true); //он сам вызывается метод --> paint(g)
+        this.setVisible(true);
     }
-
-//    @Override
-//    public void paint(Graphics g){
-//
-//    }
 }

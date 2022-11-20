@@ -143,8 +143,6 @@ public class RegistrationView extends JFrame {
                 setVisible(false);
                 registrationController.authorization();
 
-
-
             }
         });
 
@@ -152,8 +150,4 @@ public class RegistrationView extends JFrame {
         this.setVisible(true); //он сам вызывается метод --> paint(g)
     }
 
-//    @Override
-//    public void paint(Graphics g){
-//
-//    }
 }

@@ -24,12 +24,7 @@ public class UserContainer {
         }
         return true;
     }
-//    public boolean check(){
-//
-//
-//
-//        return true;
-//    }
+
 
     public boolean check(String loginText, String toHash) {
         for (User user : users) {
@@ -49,6 +44,18 @@ public class UserContainer {
             }
         }
         throw new Exception();
+
+    }
+
+    public boolean checkLogins(String login, String login1) {
+        for (User user : users) {
+            if (user.getLogin().equals(login1) && !login.equals(login1)) {
+                System.out.println(user.getRole()+"cont");
+                return true;
+            }
+        }
+        return false;
+
 
     }
 }

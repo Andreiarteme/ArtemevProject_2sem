@@ -7,24 +7,27 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
 
-public class InsertView extends JFrame {
+public class RenameView extends JFrame {
 
-    private InsertController insertController;
+    private RenameController renameController;
     public static final int weidth = 400;
     public static final int height = 200;
 
     private JPanel panel;
-    private JTextField quore;
-    private JTextField teacher;
-    private JTextField subject;
-    private JTextField data;
-    private JTextField userId;
+
+    private JTextField login;
+    private JTextField password;
+    private JTextField group;
+
     private JButton exit;
     private JButton save;
     private JLabel info;
 
-    public InsertView(InsertController insertController) {
-        this.insertController = insertController;
+
+
+
+    public RenameView(RenameController renameController) {
+        this.renameController = renameController;
         start1();
     }
 
@@ -40,11 +43,10 @@ public class InsertView extends JFrame {
         //содержимое окна
         GridBagLayout gridBagLayout = new GridBagLayout();
         panel = new JPanel(gridBagLayout);
-        quore = new JTextField(20);
-        teacher = new JTextField(15);
-        subject = new JTextField(10);
-        data = new JTextField(10);
-        userId = new JTextField(5);
+        login = new JTextField(15);
+        password = new JTextField(10);
+        group = new JTextField(10);
+
         exit = new JButton("Назад");
         save = new JButton("Сохранить");
         info = new JLabel("info");
@@ -58,7 +60,7 @@ public class InsertView extends JFrame {
         a1.gridy = 0;
         a1.gridwidth = 4;
         a1.gridheight = 1;
-        panel.add(quore, a1);
+        panel.add(login, a1);
 
         GridBagConstraints a2 = new GridBagConstraints();
         a2.weightx = 0;
@@ -67,7 +69,7 @@ public class InsertView extends JFrame {
         a2.gridy = 1;
         a2.gridwidth = 4;
         a2.gridheight = 1;
-        panel.add(teacher, a2);
+        panel.add(password, a2);
 
         GridBagConstraints a3 = new GridBagConstraints();
         a3.weightx = 0;
@@ -76,27 +78,7 @@ public class InsertView extends JFrame {
         a3.gridy = 2;
         a3.gridwidth = 4;
         a3.gridheight = 1;
-        panel.add(subject, a3);
-
-        GridBagConstraints a4 = new GridBagConstraints();
-        a4.weightx = 0;
-        a4.weighty = 0;
-        a4.gridx = 0;
-        a4.gridy = 3;
-        a4.gridwidth = 4;
-        a4.gridheight = 1;
-        panel.add(data, a4);
-
-        GridBagConstraints a5 = new GridBagConstraints();
-        a5.weightx = 0;
-        a5.weighty = 0;
-        a5.gridx = 0;
-        a5.gridy = 4;
-        a5.gridwidth = 4;
-        a5.gridheight = 1;
-        //panel.add(userId, a5);
-
-
+        panel.add(group, a3);
 
 
         GridBagConstraints a6 = new GridBagConstraints();
@@ -129,31 +111,20 @@ public class InsertView extends JFrame {
         panel.revalidate();
 
         //Акшены
+
         save.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String quore1 = quore.getText().trim();
-                String teacher1 = teacher.getText().trim();
-                String subject1 = subject.getText().trim();
-                String data1 = data.getText().trim();
-                String userId1 = insertController.getUser().getId();
+                String login1 = login.getText().trim();
+                String password1 = password.getText().trim();
+                String group1 = group.getText().trim();
 
-                try {
-                    Boolean bool = insertController.registration(quore1, teacher1, subject1, data1, userId1, info);
-                    if (bool) {
-                        setVisible(false);
-                        info.setText("I here");
-                    }else {
-                        info.setText("Не получилось");
-                    }
-                } catch (LoginException ex) {
-                    ex.printStackTrace();
-                } catch (NoSuchAlgorithmException ex) {
-                    ex.printStackTrace();
-                } catch (SQLException ex) {
-                    ex.printStackTrace();
-                } catch (ClassNotFoundException ex) {
-                    ex.printStackTrace();
+
+
+                Boolean bool = renameController.rename(login1,password1, group1, info);
+                if (bool) {
+                    setVisible(false);
+                    info.setText("I here");
                 }
 
 
@@ -164,12 +135,15 @@ public class InsertView extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 setVisible(false);
-                insertController.goBack();
+                renameController.goBack();
+
+
             }
         });
 
 
         this.setVisible(true);
     }
+
 
 }

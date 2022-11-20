@@ -17,7 +17,6 @@ public class LoginView extends JFrame {
     private JButton login;
     private JButton newUser;
     private JButton guest;
-    private JButton forgotPassword;
     private JLabel info;
 
     public LoginView(LoginController loginController){
@@ -42,7 +41,6 @@ public class LoginView extends JFrame {
         login = new JButton("Войти");
         newUser = new JButton("Зарегестрироваться");
         guest = new JButton("Гостевой режим");
-        forgotPassword = new JButton("Забыл пароль");
         info = new JLabel("");
 
         //добавление на панель
@@ -64,15 +62,6 @@ public class LoginView extends JFrame {
         a2.gridwidth = 4;
         a2.gridheight = 1;
         loginPanel.add(passwordField, a2);
-
-        GridBagConstraints a3 = new GridBagConstraints();
-        a3.weightx = 0;
-        a3.weighty = 0;
-        a3.gridx = 7;
-        a3.gridy = 2;
-        a3.gridwidth = 2;
-        a3.gridheight = 1;
-        loginPanel.add(forgotPassword, a3);
 
         GridBagConstraints a4 = new GridBagConstraints();
         a4.weightx = 0;
@@ -125,7 +114,6 @@ public class LoginView extends JFrame {
                 try {
                     //изменить на boolean
                     boolean bool = loginController.checkLoginAndPassword(loginText,passwordText);
-                    System.out.println(bool);
                     if (/*!role.equals("bad")*/bool){//сделать чтоб возвращал роль
                         info.setText("Добро пожаловать!");
                         setVisible(false);
@@ -165,22 +153,8 @@ public class LoginView extends JFrame {
             }
         });
 
-        forgotPassword.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
 
-
-                //здесь еще надо сделать штуку для изменения пароля
-
-
-            }
-        });
-
-        this.setVisible(true); //он сам вызывается метод --> paint(g)
+        this.setVisible(true);
     }
 
-//    @Override
-//    public void paint(Graphics g){
-//
-//    }
 }

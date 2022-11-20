@@ -53,23 +53,13 @@ public class LoginController {
        boolean str = dataBase.checkLoginAndPassword(loginText,toHash(passwordText));
         System.out.println(str + "logController");
         return str;
-       // return dataBase.checkLoginAndPassword(loginText,toHash(passwordText));//сделать чтоб возвращал роль
     }
-//    public String getUserId(String loginText) throws LoginException, NoSuchAlgorithmException {
-//        String userId = dataBase.getUserId(loginText);
-//        System.out.println(userId + "logController");
-//        return userId;
-//        // return dataBase.checkLoginAndPassword(loginText,toHash(passwordText));//сделать чтоб возвращал роль
-//    }
 
 
-    //вместо role добавить login
+
     public void goToView(String login) throws Exception {
         //направляет в соответсвии с ролью
-
-        //добавить метод, чтобы давал user черех логин
         User user = dataBase.getUser(login);
-        //user.getRole();
 
         if (user.getRole().equals("1")){
             //admin
@@ -84,9 +74,6 @@ public class LoginController {
             VerifierController verifierController = new VerifierController(dataBase, user);
             VerifierView verifierView = new VerifierView(verifierController);
         } else{
-//            //guest
-//            GuestController guestController = new GuestController(dataBase);
-//            GuestView guestView = new GuestView(guestController);
             System.out.println("Error такого юзера нет");
         }
     }

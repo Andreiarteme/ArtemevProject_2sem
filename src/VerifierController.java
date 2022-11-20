@@ -1,8 +1,6 @@
 import java.sql.SQLException;
 
-//public class VerifierController {
-//}
-//import java.sql.SQLException;
+
 
 public class VerifierController {
     private DataBase dataBase;
@@ -64,7 +62,6 @@ public class VerifierController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        //getVerifierGroups(dataBase.getQuotes().getArQuotes().get(ind).getUserId());
 
 
             if (userGroup.equals(verGroup) || user.getId().equals(dataBase.getQuotes().getArQuotes().get(ind).getUserId())) {
@@ -75,11 +72,6 @@ public class VerifierController {
             }else{
                 return false;
             }
-    }
-
-    public boolean whatgroup() {
-//        String group = dataBase.
-        return false;
     }
 
 
@@ -96,4 +88,11 @@ public class VerifierController {
         }
         throw new Exception();
     }
+
+    public void rename() {
+        RenameController renameController = new RenameController(dataBase, user);
+        RenameView renameView = new RenameView(renameController);
+    }
+
+
 }

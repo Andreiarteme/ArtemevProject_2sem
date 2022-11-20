@@ -1,6 +1,5 @@
 import javax.security.auth.login.LoginException;
 import javax.swing.*;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.SQLException;
 
@@ -9,14 +8,13 @@ public class InsertController {
 
     private DataBase dataBase;
     private User user;
-//    private LoginModel loginModel;
+
 
     public User getUser() {
         return user;
     }
 
-    public InsertController(/*LoginModel loginModel*/ DataBase dataBase, User user) {
-//        this.loginModel = loginModel;
+    public InsertController(DataBase dataBase, User user) {
         this.dataBase = dataBase;
         this.user = user;
     }
@@ -34,7 +32,6 @@ public class InsertController {
     }
 
     private boolean regQuote(String quore, String teacher, String subject,String data,String userId, JLabel info) throws SQLException, ClassNotFoundException {
-//        DataBase dataBase = new DataBase();
         System.out.println("regQuote from InsertController");
         if (!dataBase.getQuotes().quoteExists(quore)){
             Quote quote = new Quote("",quore,  teacher,  subject,  data,  userId);//по умолчанию роль user
@@ -65,8 +62,5 @@ public class InsertController {
                 VerifierView verifierView = new VerifierView(verifierontroller);
                 break;
         }
-//        DataBase dataBase = new DataBase();
-//        AdminController adminController = new AdminController(dataBase, user);
-//        AdminView adminView = new AdminView(adminController);
     }
 }

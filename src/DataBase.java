@@ -1,3 +1,4 @@
+import java.security.MessageDigest;
 import java.sql.*;
 
 
@@ -15,20 +16,12 @@ public class DataBase {
         String select1 ="SELECT quotes.id, quotes.quote, quotes.teacher, quotes.subject, quotes.data, user_quote.user_id FROM quotes,user_quote WHERE quotes.id = user_quote.quote_id";
         try {
             PreparedStatement prStatement = getConnection().prepareStatement(select1);
-//            prStatement.setString(1, user.getLogin());
             ResultSet result = prStatement.executeQuery();
             quotes = new QuoteContainer();
             while(result.next()){
-//                String un = result.getString("quote");
-//                String up = result.getString("teacher");
-//                String ur = result.getString("subject");
-//                String un1 = result.getString("data");
-//                String up1 = result.getString("user_id");
                 quotes.add(new Quote(result.getString("id"),result.getString("quote"), result.getString("teacher"), result.getString("subject"), result.getString("data"), result.getString("user_id")));
-//                System.out.println(un+up+ur+un1+up1);
             }
             connection.close();
-            System.out.println("my connectoion closed!!!");
         }catch (Exception e){
 
         }
@@ -49,15 +42,10 @@ public class DataBase {
             connection = DriverManager.getConnection(
                     "jdbc:mysql://std-mysql.ist.mospolytech.ru:3306/std_1965_staff",
                     "std_1965_staff", "qwerty321");
-//            Statement statement = connection.createStatement();
-//            connection.close();
-        System.out.println("The connection on the my method");
-
         return connection;
     }
 
-    //надо изменить, добавить группу юзера
-    public void registrUser(User user) throws SQLException, ClassNotFoundException {
+    public void registrUser(User user){
         String insert = "INSERT INTO `users` (`username`, `password`, `group`) VALUES (?, ?, ?);";
         try {
             PreparedStatement prStatement = getConnection().prepareStatement(insert);
@@ -65,30 +53,13 @@ public class DataBase {
             prStatement.setString(2, user.getHashPassword());
             prStatement.setString(3, user.getGroup());
             prStatement.executeUpdate();
-            System.out.println("DataBase registration");
 
             connection.close();
             users.add(user);
             insToUser_role(user);
-            System.out.println("my connectoion closed!!!");
         }catch (Exception e){
 
         }
-
-//        String uid = getNewUserId(user.getLogin());
-
-//        String sel = "SELECT users.id FROM users WHERE users.username = '" + user.getLogin() + "'";
-//        PreparedStatement prStatement = getConnection().prepareStatement(sel);
-//        ResultSet res = prStatement.executeQuery();
-//        String uid = res.getString("id");
-//        String ins = "INSERT INTO user_role (user_id, role_id)" +
-//                "VALUES (?,?)";
-//        PreparedStatement prSt = getConnection().prepareStatement(ins);
-//        prSt.setString(1, uid);
-//        prSt.setString(2, "2");
-//        prSt.executeUpdate();
-        //connection.close();
-
     }
 
 
@@ -99,21 +70,15 @@ public class DataBase {
             PreparedStatement prSt = getConnection().prepareStatement(sel);
             ResultSet result = prSt.executeQuery();
             while(result.next()){
-//                String s = result.getString("AUTO_INCREMENT");
                 id = result.getString("id");
-//                int newId = Integer.getInteger(autoIncrement)-1;
-//                autoIncrement = Integer.toString(newId);
-                //System.out.println("!!!!AUTO_INCREMENT!!!!!" + autoIncrement);
             }
             connection.close();
-            System.out.println("my connectoion closed!!!");
         }catch (Exception e){
 
         }
         return id;
     }
 
-   //надо сделать чтлобы возвращал не 7 а то что надо
     public String getNewUserId(String login) throws SQLException, ClassNotFoundException {
         String sel =" SELECT `AUTO_INCREMENT` FROM  INFORMATION_SCHEMA.TABLES WHERE TABLE_SCHEMA = 'std_1965_staff' AND   TABLE_NAME   = 'users';";
         String autoIncrement = "";
@@ -123,19 +88,14 @@ public class DataBase {
             while(result.next()){
                 String s = result.getString("AUTO_INCREMENT");
                 autoIncrement = result.getString("AUTO_INCREMENT");
-//                int newId = Integer.getInteger(autoIncrement)-1;
-//                autoIncrement = Integer.toString(newId);
-                System.out.println("!!!!AUTO_INCREMENT!!!!! = " + autoIncrement);
             }
             connection.close();
-            System.out.println("my connectoion closed!!!");
         }catch (Exception e){
-
         }
         return autoIncrement;
     }
+
     public void insToUser_role(User user) throws SQLException, ClassNotFoundException {
-//        String newId = getNewUserId(user.getLogin());
         String newId = getUserId(user.getLogin());
         String insert = "INSERT INTO user_role (user_id, role_id) VALUES (?,?)";
         try {
@@ -143,9 +103,7 @@ public class DataBase {
             prSt.setString(1, newId);
             prSt.setString(2, "2");
             prSt.executeUpdate();
-            System.out.println("YYYYEEESSS я добавил в роль");
             connection.close();
-            System.out.println("my connectoion closed!!!");
         }catch (Exception e){
 
         }
@@ -153,22 +111,15 @@ public class DataBase {
     }
 
     public UserContainer makeUsers(){
-        //ResultSet result;
-        //String select = "SELECT * FROM users" ;
         String select1 = "SELECT users.username,users.password,user_role.role_id, users.group FROM users,user_role WHERE users.id = user_role.user_id";
         try {
             PreparedStatement prStatement = getConnection().prepareStatement(select1);
-//            prStatement.setString(1, user.getLogin());
             ResultSet result = prStatement.executeQuery();
            users = new UserContainer();
             while(result.next()){
-//                String un = result.getString("username");
-//                String up = result.getString("password");
-//                String ur = result.getString("role_id");
                 String username = result.getString("username");
                 String userId = getUserId(username);
                 users.add(new User(userId, username,result.getString("password"),result.getString("role_id"), result.getString("group")));
-//                System.out.println(un + " === " + up);
             }
             connection.close();
         }catch (Exception e){
@@ -181,28 +132,6 @@ public class DataBase {
         boolean str = users.check(loginText,toHash);
             System.out.println(str + "database");
         return str;
-       // return users.check(loginText,toHash);//сделать чтоб возвращал роль
-    }
-
-//    public String getUserId(String loginText) {
-//        String sel = "SELECT id FROM user WHERE quotes.quote = '" + loginText + "'";
-//        String qid = "1";
-//        try {
-//            PreparedStatement prStat = getConnection().prepareStatement(sel);
-//            ResultSet res = prStat.executeQuery();
-//            while(res.next()){
-//                qid = res.getString("id");
-//                System.out.println("!!!!ID!!!!!" + qid);
-//            }
-//        }catch (Exception e){
-//
-//        }
-//        return qid;
-//    }
-
-    public void checkRole(String log, String role) {
-
-
     }
 
     public void registrQuote(Quote quote) {
@@ -213,17 +142,13 @@ public class DataBase {
             prStatement.setString(2, quote.getTeacher());
             prStatement.setString(3, quote.getSubject());
             prStatement.setString(4, quote.getData());
-//            prStatement.setString(5, quote.getUserId());
             prStatement.executeUpdate();
-            System.out.println("Мы здесь");
             String rr = getNewQuoteId(quote.getQuote());
             insToQuote_role(rr, quote);
             //добавление в контейнер
             quote.setId(rr);
             quotes.add(quote);
             connection.close();
-            System.out.println("my connectoion closed!!!");
-
         }catch (Exception e){
 
         }
@@ -236,10 +161,8 @@ public class DataBase {
             ResultSet res = prStat.executeQuery();
             while(res.next()){
                 qid = res.getString("id");
-                 System.out.println("!!!!ID!!!!!" + qid);
             }
             connection.close();
-            System.out.println("my connectoion closed!!!");
         }catch (Exception e){
 
         }
@@ -253,9 +176,7 @@ public class DataBase {
             prSt.setString(1, quote.getUserId());
             prSt.setString(2, qid);
             prSt.executeUpdate();
-            System.out.println("YYYYEEESSS");
             connection.close();
-            System.out.println("my connectoion closed!!!");
         }catch (Exception e){
 
         }
@@ -269,9 +190,7 @@ public class DataBase {
             PreparedStatement prSt = getConnection().prepareStatement(ins);
             prSt.setString(1, quot);
             prSt.executeUpdate();
-            System.out.println("YYYYEEESSS");
             connection.close();
-            System.out.println("my connectoion closed!!!");
             quotes.getArQuotes().remove(ind);
         }catch (Exception e){
 
@@ -290,13 +209,6 @@ public class DataBase {
         }
         return false;
     }
-//    public boolean checkAuthorGroup(int ind, User user) {
-//        String verGroup = verifierController.getVerifierGroups();
-//        if (quotes.getArQuotes().get(ind).getUserId().equals(user.getId())){
-//            return true;
-//        }
-//        return false;
-//    }
 
     public void edit2Quote(Quote quote) {
         String i = quote.getId();
@@ -306,21 +218,12 @@ public class DataBase {
         String d = quote.getData();
 
 
-//        String ins =  "UPDATE quotes SET quote = '?', teacher = '?', subject = '?', data = '?' WHERE quotes.id = '?'";
-        System.out.println("БД вот edit2Qotes");
         try {
             String ins =  "UPDATE quotes SET quote = '"+ q +"', teacher = '"+ t +"', subject = '"+ s +"', data = '"+ d +"' WHERE quotes.id = '"+ i +"'";
             PreparedStatement prSt = getConnection().prepareStatement(ins);
-//            prSt.setString(1, quote.getQuote());
-//            prSt.setString(2, quote.getTeacher());
-//            prSt.setString(3, quote.getSubject());
-//            prSt.setString(4, quote.getData());
-//            prSt.setString(5, quote.getId());
+
             prSt.executeUpdate();
-            System.out.println("YYYYEEESSS");
             connection.close();
-            System.out.println("my connectoion closed!!!");
-            //метод для замены в QuotContenier
             quotes.changeQuote(quote);
         }catch (Exception e){
 
@@ -342,10 +245,8 @@ public class DataBase {
             ResultSet res = prStat.executeQuery();
             while(res.next()){
                 qid = res.getString("group_number");
-                System.out.println("!!!!ID!!!!!" + qid);
             }
             connection.close();
-            System.out.println("my connectoion closed!!!");
         }catch (Exception e){
 
         }
@@ -361,5 +262,29 @@ public class DataBase {
             }
         }
         throw new Exception ("ошибка в DataBase getUserGroup()");
+    }
+
+    public void rename(String id, String login, String password, String group) {
+        try {   MessageDigest md5 = MessageDigest.getInstance("MD5");
+                byte[] bytes = md5.digest(password.getBytes());
+                StringBuilder builder = new StringBuilder();
+                for (byte b : bytes)
+                    builder.append(String.format("%02X ", b));
+                String hash = builder.toString().replaceAll(" ","").toLowerCase();
+
+            String ins = "UPDATE users SET `username` = '" + login +  "', `password`= '" + hash + "',  `group` = '" + group + "' WHERE users.id = '" + id + "'";
+            PreparedStatement prSt = getConnection().prepareStatement(ins);
+            prSt.executeUpdate();
+            connection.close();
+            //метод для замены в UserContainer
+            for (int i = 0;i < users.getUsers().size();i++) {
+                if (users.getUsers().get(i).getId().equals(id)){
+                    users.getUsers().get(i).setLogin(login);
+                    users.getUsers().get(i).setHashPassword(hash);
+                    users.getUsers().get(i).setGroup(group);
+                }
+            }
+        }catch (Exception e){
+        }
     }
 }

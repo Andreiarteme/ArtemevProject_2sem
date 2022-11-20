@@ -37,7 +37,6 @@ public class UserController {
     public boolean delete(int ind) throws SQLException, ClassNotFoundException {
         if (dataBase.checkAuthor(ind, user)){
         dataBase.delete(ind);
-//        DataBase dataBase = new DataBase();
 
         UserController userController = new UserController(dataBase, user);
         UserView userView = new UserView(userController);
@@ -58,7 +57,10 @@ public class UserController {
                 return false;
             }
         }
-//    public String getUserId(User user) throws SQLException, ClassNotFoundException {
-//        return dataBase.getUserId(user.getLogin());
-//    }
+
+    public void rename() {
+        RenameController renameController = new RenameController(dataBase, user);
+        RenameView renameView = new RenameView(renameController);
+    }
+
 }

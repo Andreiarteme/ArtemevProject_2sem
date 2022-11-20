@@ -9,14 +9,11 @@ import java.sql.SQLException;
 public class RegistrationController {
 
     private DataBase dataBase;
-//    private LoginModel loginModel;
 
-    public RegistrationController(/*LoginModel loginModel*/ DataBase dataBase) {
-//        this.loginModel = loginModel;
+    public RegistrationController( DataBase dataBase) {
         this.dataBase = dataBase;
     }
     public void authorization(){
-      //  start();
         LoginController loginController = new LoginController(/*loginModel*/dataBase);
         LoginView loginView = new LoginView(loginController);
     }
@@ -38,19 +35,14 @@ public class RegistrationController {
     }
 
     public boolean regUser(String regLogin, String regHashPassword, String regGroup) throws Exception {
-//        DataBase dataBase = new DataBase();
             String newUserId = dataBase.getNewUserId(regLogin);
             User user = new User(newUserId, regLogin,toHash(regHashPassword), "2", regGroup);//по умолчанию роль user
             dataBase.registrUser(user);
-            System.out.println("Пользователь зарегистрораван!!!!!!");
-            //добавить метод добавления в таблицу юзео_роль
-
             goToWiew(regLogin);
             return true;
     }
 
         public String toHash (String str) throws LoginException, NoSuchAlgorithmException {
-//        MessageDigest shall = MessageDigest.getInstance("SHA-1");
         MessageDigest md5 = MessageDigest.getInstance("MD5");
         byte[] bytes = md5.digest(str.getBytes());
         StringBuilder builder = new StringBuilder();
