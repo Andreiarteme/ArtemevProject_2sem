@@ -29,27 +29,36 @@ public class EditController {
     }
 
     private boolean editQuote(String id, String quore, String teacher, String subject,String data,String userId, JLabel info) throws SQLException, ClassNotFoundException {
-        DataBase dataBase = new DataBase();
+//        DataBase dataBase = new DataBase();
         System.out.println("editQuote from EdittController");
-        if (!dataBase.getQuotes().quoteExists(quore)){
             Quote quote = new Quote(id,quore,  teacher,  subject,  data,  userId);//по умолчанию роль user
             dataBase.edit2Quote(quote);
             info.setText("Запись успешно изменена!");
             goBack();
             return true;
-        }else{
-            info.setText("Данная цитата уже существует!");
-            return false;
-        }
-
     }
 
 
     public void goBack() {
         System.out.println("EditController goBack");
-        DataBase dataBase = new DataBase();
-        AdminController adminController = new AdminController(dataBase, user);
-        AdminView adminView = new AdminView(adminController);
+//        DataBase dataBase = new DataBase();
+        //добавить кейсы
+        switch (Integer.parseInt(user.getRole())){
+            case 1:
+                AdminController adminController = new AdminController(dataBase, user);
+                AdminView adminView = new AdminView(adminController);
+                break;
+            case 2:
+                UserController userController = new UserController(dataBase, user);
+                UserView userView = new UserView(userController);
+                break;
+            case 3:
+                VerifierController verifierontroller = new VerifierController(dataBase, user);
+                VerifierView verifierView = new VerifierView(verifierontroller);
+                break;
+        }
+//        AdminController adminController = new AdminController(dataBase, user);
+//        AdminView adminView = new AdminView(adminController);
     }
 
 //    public Boolean edit2(String quore1, String teacher1, String subject1, String data1, String userId1, JLabel info) {

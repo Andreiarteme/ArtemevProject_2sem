@@ -17,6 +17,7 @@ public class UserView extends JFrame {
     private JButton edit;
     private JButton exit;
     private JLabel info;
+    private JLabel info2;
     private JTable table;
 
     public UserView(UserController userController) {
@@ -47,7 +48,7 @@ public class UserView extends JFrame {
 
         //добавление на панель
 
-        AdminTableModel tableModel = new AdminTableModel(userController.getDataBase().getQuotes().getArQuotes());
+        UserTableModel tableModel = new UserTableModel(userController.getDataBase().getQuotes().getArQuotes(), userController.getUser());
         table = new JTable(tableModel);
         JScrollPane tableScroll = new JScrollPane(table);
         tableScroll.setPreferredSize(new Dimension(800, 600));
@@ -62,27 +63,33 @@ public class UserView extends JFrame {
                 new Insets(1, 1, 1, 1), 0, 0));
 
         exit = new JButton("Назад");
-        add(exit, new GridBagConstraints(0, 1, 1, 1, 1, 1,
+        add(exit, new GridBagConstraints(0, 2, 1, 1, 1, 1,
                 GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
                 new Insets(1, 1, 1, 1), 0, 0));
 
         insert = new JButton("Добавить");
-        add(insert, new GridBagConstraints(1, 1, 1, 1, 1, 1,
+        add(insert, new GridBagConstraints(1, 2, 1, 1, 1, 1,
                 GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
                 new Insets(1, 1, 1, 1), 0, 0));
 
         edit = new JButton("Редактировать");
-        add(edit, new GridBagConstraints(2, 1, 1, 1, 1, 1,
+        add(edit, new GridBagConstraints(2, 2, 1, 1, 1, 1,
                 GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
                 new Insets(1, 1, 1, 1), 0, 0));
 
         delete = new JButton("Удалить");
-        add(delete, new GridBagConstraints(3, 1, 1, 1, 1, 1,
+        add(delete, new GridBagConstraints(3, 2, 1, 1, 1, 1,
                 GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
                 new Insets(1, 1, 1, 1), 0, 0));
 
-        info = new JLabel("info");
-        add(info, new GridBagConstraints(4, 1, 1, 1, 1, 1,
+
+        info = new JLabel("Мои записи = " + tableModel.getCount());
+        add(info, new GridBagConstraints(4, 2, 1, 1, 1, 1,
+                GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
+                new Insets(1, 1, 1, 1), 0, 0));
+
+        info2 = new JLabel("");
+        add(info2, new GridBagConstraints(2, 1, 1, 1, 1, 1,
                 GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
                 new Insets(1, 1, 1, 1), 0, 0));
 
@@ -157,18 +164,21 @@ public class UserView extends JFrame {
         insert.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
                 userController.insert();
+                setVisible(false);
+
             }
         });
 
         edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
                 int ind = table.getSelectedRow();
-                userController.edit(ind);
-
+                if(userController.edit(ind)) {
+                    setVisible(false);
+                }else {
+                    info2.setText("Это не ваша запись");
+                }
 
             }
         });
@@ -178,15 +188,18 @@ public class UserView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int ind = table.getSelectedRow();
                 try {
-                    userController.delete(ind);
-                    setVisible(false);
+                    if(userController.delete(ind)) {
+                        setVisible(false);
+                    }else {
+                        info2.setText("Это не ваша запись");
+                    }
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 } catch (ClassNotFoundException ex) {
                     ex.printStackTrace();
                 }
-
-
+//                    userController.delete(ind);
+//                    setVisible(false);
             }
         });
 

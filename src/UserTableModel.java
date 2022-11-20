@@ -1,16 +1,17 @@
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 
-public class AdminTableModel extends AbstractTableModel {
+
+public class UserTableModel extends AbstractTableModel {
     private int columnCount = 5;
     private ArrayList<Quote> quotes;
     private ArrayList<String []> arrayList;
-    private AdminController adminController;
+    private User user;
     private int count = 0;
 
-    public AdminTableModel(ArrayList<Quote> quotes, AdminController adminController) {
+    public UserTableModel(ArrayList<Quote> quotes, User user) {
         this.quotes = quotes;
-        this.adminController = adminController;
+        this.user = user;
         arrayList = new ArrayList<String[]>();
         for (int i = 0;i < quotes.size();i++){
             String[] str = new String[columnCount];
@@ -18,8 +19,8 @@ public class AdminTableModel extends AbstractTableModel {
             str[1] = quotes.get(i).getTeacher();
             str[2] = quotes.get(i).getSubject();
             str[3] = quotes.get(i).getData();
-            str[4] = quotes.get(i).getUserId();
-            if (quotes.get(i).getUserId().equals(adminController.getUser().getId())) {
+            str[4] = "Не моя запись";
+            if (quotes.get(i).getUserId().equals(user.getId())) {
                 String c = Integer.toString(++count);
                 str[4] = quotes.get(i).getUserId() + ": Моя запись №" + c;
             }
@@ -59,7 +60,7 @@ public class AdminTableModel extends AbstractTableModel {
             case 1: return "Преподаватель";
             case 2: return "Предмет";
             case 3: return "Дата";
-            case 4: return "ID автора";
+            case 4: return "Чья запись";
         }
         return "";
     }
@@ -78,7 +79,7 @@ public class AdminTableModel extends AbstractTableModel {
         if (nameColumn.equals("Дата")){
             return q.getData();
         }
-        if (nameColumn.equals("ID автора")){
+        if (nameColumn.equals("Чья запись")){
             return q.getData();
         }
         return null ;

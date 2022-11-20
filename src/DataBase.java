@@ -94,23 +94,23 @@ public class DataBase {
 
     public String getUserId(String login) throws SQLException, ClassNotFoundException {
         String sel = "SELECT users.id FROM users WHERE users.username = '" + login + "'";
-        String autoIncrement = "";
+        String id = "";
         try {
             PreparedStatement prSt = getConnection().prepareStatement(sel);
             ResultSet result = prSt.executeQuery();
             while(result.next()){
 //                String s = result.getString("AUTO_INCREMENT");
-                autoIncrement = result.getString("id");
+                id = result.getString("id");
 //                int newId = Integer.getInteger(autoIncrement)-1;
 //                autoIncrement = Integer.toString(newId);
-                System.out.println("!!!!AUTO_INCREMENT!!!!!" + autoIncrement);
+                //System.out.println("!!!!AUTO_INCREMENT!!!!!" + autoIncrement);
             }
             connection.close();
             System.out.println("my connectoion closed!!!");
         }catch (Exception e){
 
         }
-        return autoIncrement;
+        return id;
     }
 
    //надо сделать чтлобы возвращал не 7 а то что надо
@@ -123,9 +123,9 @@ public class DataBase {
             while(result.next()){
                 String s = result.getString("AUTO_INCREMENT");
                 autoIncrement = result.getString("AUTO_INCREMENT");
-                int newId = Integer.getInteger(autoIncrement)-1;
-                autoIncrement = Integer.toString(newId);
-                System.out.println("!!!!AUTO_INCREMENT!!!!!" + newId);
+//                int newId = Integer.getInteger(autoIncrement)-1;
+//                autoIncrement = Integer.toString(newId);
+                System.out.println("!!!!AUTO_INCREMENT!!!!! = " + autoIncrement);
             }
             connection.close();
             System.out.println("my connectoion closed!!!");
@@ -165,7 +165,9 @@ public class DataBase {
 //                String un = result.getString("username");
 //                String up = result.getString("password");
 //                String ur = result.getString("role_id");
-                users.add(new User(result.getString("username"),result.getString("password"),result.getString("role_id"), result.getString("group")));
+                String username = result.getString("username");
+                String userId = getUserId(username);
+                users.add(new User(userId, username,result.getString("password"),result.getString("role_id"), result.getString("group")));
 //                System.out.println(un + " === " + up);
             }
             connection.close();
@@ -215,7 +217,10 @@ public class DataBase {
             prStatement.executeUpdate();
             System.out.println("Мы здесь");
             String rr = getNewQuoteId(quote.getQuote());
-            insToQuote_role(rr);
+            insToQuote_role(rr, quote);
+            //добавление в контейнер
+            quote.setId(rr);
+            quotes.add(quote);
             connection.close();
             System.out.println("my connectoion closed!!!");
 
@@ -240,12 +245,12 @@ public class DataBase {
         }
         return qid;
     }
-    public void insToQuote_role(String qid) throws SQLException, ClassNotFoundException {
+    public void insToQuote_role(String qid, Quote quote) throws SQLException, ClassNotFoundException {
         String ins = "INSERT INTO user_quote (user_id, quote_id)" +
                 "VALUES (?,?)";
         try {
             PreparedStatement prSt = getConnection().prepareStatement(ins);
-            prSt.setString(1, "5");
+            prSt.setString(1, quote.getUserId());
             prSt.setString(2, qid);
             prSt.executeUpdate();
             System.out.println("YYYYEEESSS");
@@ -267,6 +272,7 @@ public class DataBase {
             System.out.println("YYYYEEESSS");
             connection.close();
             System.out.println("my connectoion closed!!!");
+            quotes.getArQuotes().remove(ind);
         }catch (Exception e){
 
         }
@@ -278,14 +284,27 @@ public class DataBase {
         Quote quot = quotes.getArQuotes().get(ind);
         return quot;
     }
+    public boolean checkAuthor(int ind, User user) {
+        if (quotes.getArQuotes().get(ind).getUserId().equals(user.getId())){
+            return true;
+        }
+        return false;
+    }
+//    public boolean checkAuthorGroup(int ind, User user) {
+//        String verGroup = verifierController.getVerifierGroups();
+//        if (quotes.getArQuotes().get(ind).getUserId().equals(user.getId())){
+//            return true;
+//        }
+//        return false;
+//    }
 
     public void edit2Quote(Quote quote) {
-        //String id = quote.getId();
+        String i = quote.getId();
         String q = quote.getQuote();
         String t = quote.getTeacher();
         String s = quote.getSubject();
         String d = quote.getData();
-        String i = quote.getId();
+
 
 //        String ins =  "UPDATE quotes SET quote = '?', teacher = '?', subject = '?', data = '?' WHERE quotes.id = '?'";
         System.out.println("БД вот edit2Qotes");
@@ -301,6 +320,8 @@ public class DataBase {
             System.out.println("YYYYEEESSS");
             connection.close();
             System.out.println("my connectoion closed!!!");
+            //метод для замены в QuotContenier
+            quotes.changeQuote(quote);
         }catch (Exception e){
 
         }
@@ -311,5 +332,34 @@ public class DataBase {
         User user;
         user = users.getUser(login);
         return user;
+    }
+
+    public String getVerifierGroups(String id) {
+        String sel = "SELECT `group_number` FROM verifier_group WHERE `verifier_id` = " + id;
+        String qid = "bad";
+        try {
+            PreparedStatement prStat = getConnection().prepareStatement(sel);
+            ResultSet res = prStat.executeQuery();
+            while(res.next()){
+                qid = res.getString("group_number");
+                System.out.println("!!!!ID!!!!!" + qid);
+            }
+            connection.close();
+            System.out.println("my connectoion closed!!!");
+        }catch (Exception e){
+
+        }
+        return qid;
+    }
+
+    public String getUserGroup(String id) throws Exception {
+        String userGroup;
+        for (int i = 0;i < users.getUsers().size();i++) {
+            if (users.getUsers().get(i).getId().equals(id)){
+                userGroup = users.getUsers().get(i).getGroup();
+                return userGroup;
+            }
+        }
+        throw new Exception ("ошибка в DataBase getUserGroup()");
     }
 }

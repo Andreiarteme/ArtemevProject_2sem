@@ -14,10 +14,18 @@ public class QuoteContainer {
     public boolean quoteExists(String newQuote){
         for (Quote quote: quotes) {
             if (quote.getQuote().equals(newQuote)){
-                return false;
+                return true;
             }
         }
-        return true;
+        return false;
+    }
+    public void changeQuote(Quote quot){
+        for (int i =0;i < quotes.size();i++){
+            if (quotes.get(i).getId().equals(quot.getId())){
+                quotes.set(i,quot);
+                break;
+            }
+        }
     }
 
     public ArrayList<Quote> getArQuotes() {

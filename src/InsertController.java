@@ -11,6 +11,10 @@ public class InsertController {
     private User user;
 //    private LoginModel loginModel;
 
+    public User getUser() {
+        return user;
+    }
+
     public InsertController(/*LoginModel loginModel*/ DataBase dataBase, User user) {
 //        this.loginModel = loginModel;
         this.dataBase = dataBase;
@@ -30,9 +34,9 @@ public class InsertController {
     }
 
     private boolean regQuote(String quore, String teacher, String subject,String data,String userId, JLabel info) throws SQLException, ClassNotFoundException {
-        DataBase dataBase = new DataBase();
+//        DataBase dataBase = new DataBase();
         System.out.println("regQuote from InsertController");
-        if (dataBase.getQuotes().quoteExists(quore)){
+        if (!dataBase.getQuotes().quoteExists(quore)){
             Quote quote = new Quote("",quore,  teacher,  subject,  data,  userId);//по умолчанию роль user
             dataBase.registrQuote(quote);
             info.setText("Запись успешно добавленна!");
@@ -47,8 +51,22 @@ public class InsertController {
 
 
     public void goBack() {
-        DataBase dataBase = new DataBase();
-        AdminController adminController = new AdminController(dataBase, user);
-        AdminView adminView = new AdminView(adminController);
+        switch (Integer.parseInt(user.getRole())){
+            case 1:
+                AdminController adminController = new AdminController(dataBase, user);
+                AdminView adminView = new AdminView(adminController);
+                break;
+            case 2:
+                UserController userController = new UserController(dataBase, user);
+                UserView userView = new UserView(userController);
+                break;
+            case 3:
+                VerifierController verifierontroller = new VerifierController(dataBase, user);
+                VerifierView verifierView = new VerifierView(verifierontroller);
+                break;
+        }
+//        DataBase dataBase = new DataBase();
+//        AdminController adminController = new AdminController(dataBase, user);
+//        AdminView adminView = new AdminView(adminController);
     }
 }

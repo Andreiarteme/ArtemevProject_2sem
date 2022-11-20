@@ -25,14 +25,19 @@ public class VerifierView extends JFrame {
     private JButton edit;
     private JButton exit;
     private JLabel info;
+    private JLabel info2;
     private JTable table;
 
     public VerifierView(VerifierController verifierController) {
         this.verifierController = verifierController;
-        start();
+        try {
+            start();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    public void start() {
+    public void start() throws Exception {
         this.setSize(weidth + 10, height + 10);
 //        this.setSize(new Dimension());
         this.setTitle("Цитаты преподавателей");
@@ -55,7 +60,7 @@ public class VerifierView extends JFrame {
 
         //добавление на панель
 
-        AdminTableModel tableModel = new AdminTableModel(verifierController.getDataBase().getQuotes().getArQuotes());
+        VerifierTableModel tableModel = new VerifierTableModel(verifierController.getDataBase().getQuotes().getArQuotes(), verifierController);
         table = new JTable(tableModel);
         JScrollPane tableScroll = new JScrollPane(table);
         tableScroll.setPreferredSize(new Dimension(800, 600));
@@ -70,27 +75,32 @@ public class VerifierView extends JFrame {
                 new Insets(1, 1, 1, 1), 0, 0));
 
         exit = new JButton("Назад");
-        add(exit, new GridBagConstraints(0, 1, 1, 1, 1, 1,
+        add(exit, new GridBagConstraints(0, 2, 1, 1, 1, 1,
                 GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
                 new Insets(1, 1, 1, 1), 0, 0));
 
         insert = new JButton("Добавить");
-        add(insert, new GridBagConstraints(1, 1, 1, 1, 1, 1,
+        add(insert, new GridBagConstraints(1, 2, 1, 1, 1, 1,
                 GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
                 new Insets(1, 1, 1, 1), 0, 0));
 
         edit = new JButton("Редактировать");
-        add(edit, new GridBagConstraints(2, 1, 1, 1, 1, 1,
+        add(edit, new GridBagConstraints(2, 2, 1, 1, 1, 1,
                 GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
                 new Insets(1, 1, 1, 1), 0, 0));
 
         delete = new JButton("Удалить");
-        add(delete, new GridBagConstraints(3, 1, 1, 1, 1, 1,
+        add(delete, new GridBagConstraints(3, 2, 1, 1, 1, 1,
                 GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
                 new Insets(1, 1, 1, 1), 0, 0));
 
-        info = new JLabel("info");
-        add(info, new GridBagConstraints(4, 1, 1, 1, 1, 1,
+        info = new JLabel("Моих записей: " + tableModel.getCount());
+        add(info, new GridBagConstraints(4, 2, 1, 1, 1, 1,
+                GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
+                new Insets(1, 1, 1, 1), 0, 0));
+
+        info2 = new JLabel("");
+        add(info2, new GridBagConstraints(2, 1, 1, 1, 1, 1,
                 GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
                 new Insets(1, 1, 1, 1), 0, 0));
 
@@ -165,19 +175,24 @@ public class VerifierView extends JFrame {
         insert.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
                 verifierController.insert();
+                setVisible(false);
             }
         });
 
         edit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
                 int ind = table.getSelectedRow();
+                if(verifierController.edit(ind)) {
+                    setVisible(false);
+                }else {
+                    info2.setText("Вы не можете редактировать эту запись");
+                }
+
+                setVisible(false);
                 //добавить может ли он редактировать эту выделенную запись
 //                verifierController.whatgroup();
-                verifierController.edit(ind);
 
 
             }
@@ -188,8 +203,12 @@ public class VerifierView extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 int ind = table.getSelectedRow();
                 try {
-                    verifierController.delete(ind);
-                    setVisible(false);
+
+                    if(verifierController.delete(ind)) {
+                        setVisible(false);
+                    }else {
+                        info2.setText("Вы не можете удалить эту запись");
+                    }
                 } catch (SQLException ex) {
                     ex.printStackTrace();
                 } catch (ClassNotFoundException ex) {

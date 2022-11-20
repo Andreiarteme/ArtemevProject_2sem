@@ -1,3 +1,4 @@
+import javax.swing.*;
 import java.sql.SQLException;
 
 
@@ -10,6 +11,10 @@ public class UserController {
     public UserController(DataBase dataBase, User user) {
         this.dataBase = dataBase;
         this.user = user;
+    }
+
+    public User getUser() {
+        return user;
     }
 
     public DataBase getDataBase() {
@@ -29,18 +34,31 @@ public class UserController {
 
     }
 
-    public void delete(int ind) throws SQLException, ClassNotFoundException {
+    public boolean delete(int ind) throws SQLException, ClassNotFoundException {
+        if (dataBase.checkAuthor(ind, user)){
         dataBase.delete(ind);
-        DataBase dataBase = new DataBase();
+//        DataBase dataBase = new DataBase();
+
         UserController userController = new UserController(dataBase, user);
         UserView userView = new UserView(userController);
-
+            return true;
+        }else{
+            return false;
+        }
 
     }
 
-    public void edit(int ind) {
-        Quote quote = dataBase.edit1(ind);
-        EditController editController = new EditController(dataBase, user);
-        EditView editView = new EditView(editController,quote);
-    }
+    public boolean edit(int ind) {
+            if (dataBase.checkAuthor(ind, user)) {
+                Quote quote = dataBase.edit1(ind);
+                EditController editController = new EditController(dataBase, user);
+                EditView editView = new EditView(editController, quote);
+                return true;
+            }else{
+                return false;
+            }
+        }
+//    public String getUserId(User user) throws SQLException, ClassNotFoundException {
+//        return dataBase.getUserId(user.getLogin());
+//    }
 }

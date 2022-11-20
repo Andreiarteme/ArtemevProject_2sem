@@ -15,6 +15,9 @@ public class AdminController {
 
     //сделать добавление верификатора!!!!!!
 
+    public User getUser() {
+        return user;
+    }
     public void toLoginWindow() {
         LoginController loginController = new LoginController(dataBase);
         LoginView loginView = new LoginView(loginController);
@@ -29,7 +32,6 @@ public class AdminController {
 
     public void delete(int ind) throws SQLException, ClassNotFoundException {
         dataBase.delete(ind);
-        DataBase dataBase = new DataBase();
         AdminController adminController = new AdminController(dataBase, user);
         AdminView adminView = new AdminView(adminController);
 

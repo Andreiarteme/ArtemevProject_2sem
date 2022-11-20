@@ -13,6 +13,8 @@ public class VerifierController {
         this.user = user;
     }
 
+
+
     public DataBase getDataBase() {
         return dataBase;
     }
@@ -23,29 +25,75 @@ public class VerifierController {
 
     }
 
+    public User getUser() {
+        return user;
+    }
+
     public void insert() {
         InsertController insertController = new InsertController(dataBase, user);
         InsertView insertView = new InsertView(insertController);
 
     }
 
-    public void delete(int ind) throws SQLException, ClassNotFoundException {
-        dataBase.delete(ind);
-        DataBase dataBase = new DataBase();
-        AdminController adminController = new AdminController(dataBase, user);
-        AdminView adminView = new AdminView(adminController);
+    public boolean delete(int ind) throws SQLException, ClassNotFoundException {
+        String verGroup = dataBase.getVerifierGroups(user.getId());
+        String userGroup = "";
+        try {
+            userGroup = dataBase.getUserGroup(dataBase.getQuotes().getArQuotes().get(ind).getUserId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
+
+        if (userGroup.equals(verGroup) || user.getId().equals(dataBase.getQuotes().getArQuotes().get(ind).getUserId())) {
+            dataBase.delete(ind);
+            VerifierController verifierController = new VerifierController(dataBase, user);
+            VerifierView verifierView = new VerifierView(verifierController);
+            return true;
+        }else{
+            return false;
+        }
 
     }
 
-    public void edit(int ind) {
-        Quote quote = dataBase.edit1(ind);
-        EditController editController = new EditController(dataBase, user);
-        EditView editView = new EditView(editController,quote);
+    public boolean edit(int ind) {
+        String verGroup = dataBase.getVerifierGroups(user.getId());
+        String userGroup = "";
+        try {
+            userGroup = dataBase.getUserGroup(dataBase.getQuotes().getArQuotes().get(ind).getUserId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //getVerifierGroups(dataBase.getQuotes().getArQuotes().get(ind).getUserId());
+
+
+            if (userGroup.equals(verGroup) || user.getId().equals(dataBase.getQuotes().getArQuotes().get(ind).getUserId())) {
+            Quote quote = dataBase.edit1(ind);
+            EditController editController = new EditController(dataBase, user);
+            EditView editView = new EditView(editController,quote);
+                return true;
+            }else{
+                return false;
+            }
     }
 
     public boolean whatgroup() {
 //        String group = dataBase.
         return false;
+    }
+
+
+    public String getVerifierGroups() {
+        return dataBase.getVerifierGroups(user.getId());
+    }
+
+    public String getUserGroup(String id) throws Exception {
+        try {
+            return dataBase.getUserGroup(id);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        throw new Exception();
     }
 }

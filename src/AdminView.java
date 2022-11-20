@@ -47,7 +47,7 @@ public class AdminView extends JFrame {
 
         //добавление на панель
 
-        AdminTableModel tableModel = new AdminTableModel(adminController.getDataBase().getQuotes().getArQuotes());
+        AdminTableModel tableModel = new AdminTableModel(adminController.getDataBase().getQuotes().getArQuotes(), adminController);
          table = new JTable(tableModel);
         JScrollPane tableScroll = new JScrollPane(table);
         tableScroll.setPreferredSize(new Dimension(800, 600));
@@ -81,7 +81,7 @@ public class AdminView extends JFrame {
                 GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
                 new Insets(1, 1, 1, 1), 0, 0));
 
-        info = new JLabel("info");
+        info = new JLabel("Vjb[ pfgbctq: " + tableModel.getCount());
         add(info, new GridBagConstraints(4, 1, 1, 1, 1, 1,
                 GridBagConstraints.SOUTH, GridBagConstraints.HORIZONTAL,
                 new Insets(1, 1, 1, 1), 0, 0));
@@ -157,8 +157,8 @@ public class AdminView extends JFrame {
         insert.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setVisible(false);
                 adminController.insert();
+                setVisible(false);
             }
         });
 

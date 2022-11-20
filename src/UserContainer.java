@@ -12,6 +12,10 @@ public class UserContainer {
         users.add(user);
     }
 
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
     public boolean userExists(String login){
         for ( User user: users) {
             if (user.getLogin().equals(login)){

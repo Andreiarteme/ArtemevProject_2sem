@@ -1,17 +1,19 @@
 import javax.swing.table.AbstractTableModel;
 import java.util.ArrayList;
 
-public class AdminTableModel extends AbstractTableModel {
+
+public class VerifierTableModel extends AbstractTableModel {
     private int columnCount = 5;
     private ArrayList<Quote> quotes;
     private ArrayList<String []> arrayList;
-    private AdminController adminController;
+    private VerifierController verifierController;
     private int count = 0;
 
-    public AdminTableModel(ArrayList<Quote> quotes, AdminController adminController) {
+    public VerifierTableModel(ArrayList<Quote> quotes, VerifierController verifierController) throws Exception {
         this.quotes = quotes;
-        this.adminController = adminController;
+        this.verifierController = verifierController;
         arrayList = new ArrayList<String[]>();
+        String verGroup = verifierController.getVerifierGroups();
         for (int i = 0;i < quotes.size();i++){
             String[] str = new String[columnCount];
             str[0] = quotes.get(i).getQuote();
@@ -19,7 +21,12 @@ public class AdminTableModel extends AbstractTableModel {
             str[2] = quotes.get(i).getSubject();
             str[3] = quotes.get(i).getData();
             str[4] = quotes.get(i).getUserId();
-            if (quotes.get(i).getUserId().equals(adminController.getUser().getId())) {
+
+            String userGroup = verifierController.getUserGroup(quotes.get(i).getUserId());
+            if (userGroup.equals(verGroup)) {
+                str[4] = quotes.get(i).getUserId() + " Из моей группы";
+            }
+            if (quotes.get(i).getUserId().equals(verifierController.getUser().getId())) {
                 String c = Integer.toString(++count);
                 str[4] = quotes.get(i).getUserId() + ": Моя запись №" + c;
             }
@@ -31,11 +38,9 @@ public class AdminTableModel extends AbstractTableModel {
     public void addInTable(Quote quote){
 
     }
-
     public int getCount() {
         return count;
     }
-
     @Override
     public int getRowCount() {
         return quotes.size();

@@ -94,7 +94,9 @@ public class InsertView extends JFrame {
         a5.gridy = 4;
         a5.gridwidth = 4;
         a5.gridheight = 1;
-        panel.add(userId, a5);
+        //panel.add(userId, a5);
+
+
 
 
         GridBagConstraints a6 = new GridBagConstraints();
@@ -139,15 +141,17 @@ public class InsertView extends JFrame {
                 String teacher1 = teacher.getText().trim();
                 String subject1 = subject.getText().trim();
                 String data1 = data.getText().trim();
-                String userId1 = userId.getText().trim();
+//                String userId1 = userId.getText().trim();
+                String userId1 = insertController.getUser().getId();
 
                 try {
                     Boolean bool = insertController.registration(quore1, teacher1, subject1, data1, userId1, info);
                     if (bool) {
                         setVisible(false);
                         info.setText("I here");
+                    }else {
+                        info.setText("Не получилось");
                     }
-                    info.setText("Не получилось");
                 } catch (LoginException ex) {
                     ex.printStackTrace();
                 } catch (NoSuchAlgorithmException ex) {

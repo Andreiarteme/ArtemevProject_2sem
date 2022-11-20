@@ -1,15 +1,25 @@
 public class User {
+    private String id;
     private String login;
     private String hashPassword;
     private String role;
     private String group;
 
-    public User(String login, String hashPassword, String role, String group) {
+
+
+    public User(String id, String login, String hashPassword, String role, String group) {
+        this.id = id;
         this.login = login;
         this.hashPassword = hashPassword;
         this.role = role;
         this.group = group;
 
+    }
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getRole() {

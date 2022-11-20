@@ -39,7 +39,8 @@ public class RegistrationController {
 
     public boolean regUser(String regLogin, String regHashPassword, String regGroup) throws Exception {
 //        DataBase dataBase = new DataBase();
-            User user = new User(regLogin,toHash(regHashPassword), "2", regGroup);//по умолчанию роль user
+            String newUserId = dataBase.getNewUserId(regLogin);
+            User user = new User(newUserId, regLogin,toHash(regHashPassword), "2", regGroup);//по умолчанию роль user
             dataBase.registrUser(user);
             System.out.println("Пользователь зарегистрораван!!!!!!");
             //добавить метод добавления в таблицу юзео_роль
